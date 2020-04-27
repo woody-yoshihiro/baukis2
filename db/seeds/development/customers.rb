@@ -9,7 +9,7 @@ family_names = %w{
   伊藤:イトウ:ito
   山本:ヤマモト:yamamoto
   中村:ナカムラ:nakamura
-  小林:コバヤシ;kobayashi
+  小林:コバヤシ:kobayashi
   加藤:カトウ:kato
 }
 
