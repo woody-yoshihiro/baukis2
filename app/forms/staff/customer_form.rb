@@ -4,31 +4,38 @@ class Staff::CustomerForm
   attr_accessor :customer
   delegate :persisted?, to: :customer
 
-  def initialize(customer = nil)
+  def initialize( customer = nil )
     @customer = customer
-    @customer ||= Customer.new(gender: "male")
+    @customer ||= Customer.new( gender: "male" )
     @customer.build_home_address unless @customer.home_address
     @customer.build_work_address unless @customer.work_address
   end
 
-  def assign_attributes(params = {})
+  def assign_attributes( params = {} )
     @params = params
 
-    customer.assign_attributes(customer_params)
-    customer.home_address.assign_attributes(home_address_params)
-    customer.work_address.assign_attributes(work_address_params)
+    customer.assign_attributes( customer_params )
+    customer.home_address.assign_attributes( home_address_params )
+    customer.work_address.assign_attributes( work_address_params )
+  end
+
+  def valid?
+    [ customer, customer.home_address, customer.work_address ]
+    .map(&:valid?).all?
   end
 
   def save
+    if valid?
     ActiveRecord::Base.transaction do
       customer.save!
       customer.home_address.save!
       customer.work_address.save!
     end
+    end
   end
 
   private def customer_params
-    @params.require(:customer).permit(
+    @params.require( :customer ).permit(
       :email, :password,
       :family_name, :given_name, :family_name_kana, :given_name_kana,
       :birthday, :gender
@@ -36,13 +43,13 @@ class Staff::CustomerForm
   end
 
   private def home_address_params
-    @params.require(:home_address).permit(
+    @params.require( :home_address ).permit(
       :postal_code, :prefecture, :city, :address1, :address2
     )
   end
 
   private def work_address_params
-    @params.require(:work_address).permit(
+    @params.require( :work_address ).permit(
       :postal_code, :prefecture, :city, :address1, :address2,
       :company_name, :division_name
     )
