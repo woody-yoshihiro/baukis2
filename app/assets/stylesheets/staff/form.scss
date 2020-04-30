@@ -32,10 +32,13 @@ div#wrapper {
           font-size: $small;
           span.mark {color: $red;}
         }
-        div.check-boxes, div.radio-bittons {
+        div.check-boxes, div.radio-buttons {
           label {
             display: inline-block;
           }
+        }
+        input[type="checkbox"] + label {
+          display: inline-block;
         }
         div.buttons {
           text-align: center;
